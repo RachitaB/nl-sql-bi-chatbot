@@ -1,0 +1,7 @@
+.env
+*.db
+charts/
+__pycache__/
+*.pyc
+streamlit/
+*.llm_genAI
