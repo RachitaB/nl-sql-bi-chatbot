@@ -6,9 +6,6 @@ Built with Python · Streamlit · Ollama (qwen2.5-coder) · SQLite
 
 ---
 
-## 📸 Demo
-[screenshot of your app here]
-
 ## 💡 What it does
 - Converts natural language to SQL using a local LLM (no API costs)
 - Executes queries against a real SQLite database (US Superstore 2014–2017)
