@@ -9,7 +9,7 @@ Built with Python, Streamlit, Ollama, SQLite, Pandas, and Matplotlib.
 Add your app recording here:
 
 ```md
-[Watch the demo]([YOUR_RECORDING_LINK_HERE](https://youtu.be/GZby-QbjRM4))
+[Watch the demo](https://youtu.be/GZby-QbjRM4)
 ```
 
 You can upload the recording to GitHub by dragging it into a release, an issue, or the README editor, then replacing the placeholder above with the generated link.
