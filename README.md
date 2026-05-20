@@ -1,84 +1,98 @@
 # NL-to-SQL BI Chatbot
 
-Ask business questions in plain English and get SQL, charts, and quick insights from a local SQLite database.
+Ask business questions in plain English and get SQL queries, charts, and insights from a local SQLite database.
 
-Built with Python, Streamlit, Ollama, SQLite, Pandas, and Matplotlib.
+Built using Python, Streamlit, Ollama, SQLite, Pandas, and Matplotlib.
 
-## Demo
+---
 
-Add your app recording here:
+## Features
 
-```md
-[Watch the demo](https://youtu.be/GZby-QbjRM4)
-```
+- Convert natural-language business questions into SQLite queries using a local LLM
+- Execute queries against a US Superstore SQLite database
+- Generate:
+  - Bar charts
+  - Line charts
+  - Grouped comparison charts
+  - Data tables
+- Handle monthly trend analysis with deterministic SQL logic
+- Support both JSON and raw SQL responses from the LLM
+- Detect multi-metric queries and generate comparison charts automatically
+- Highlight negative profit values in outputs
+- Display detailed error traces inside the Streamlit app
+- Export charts and results as CSV files
 
-You can upload the recording to GitHub by dragging it into a release, an issue, or the README editor, then replacing the placeholder above with the generated link.
-
-## What It Does
-
-- Converts natural-language business questions into SQLite queries using a local LLM.
-- Runs queries against a US Superstore SQLite database.
-- Builds bar charts, line charts, grouped comparisons, and tables.
-- Handles monthly trend questions with deterministic SQL for reliable date logic.
-- Accepts both JSON and raw SQL responses from the local model.
-- Detects multi-metric queries and switches to side-by-side comparison charts.
-- Color-codes negative profit values in results.
-- Shows detailed error traces inside the Streamlit app when something fails.
-- Supports one-click CSV and chart downloads.
+---
 
 ## Tech Stack
 
-| Layer | Tool |
+| Layer | Technology |
 | --- | --- |
-| App | Streamlit |
+| Frontend | Streamlit |
 | Local LLM | Ollama + llama3.2 |
 | Database | SQLite |
-| Data work | Pandas |
-| Charts | Matplotlib |
-| Dataset | US Superstore orders |
+| Data Processing | Pandas |
+| Visualization | Matplotlib |
+| Dataset | US Superstore Orders |
+
+---
 
 ## Requirements
 
 - Python 3.14
-- Ollama running locally
-- `llama3.2:latest` pulled in Ollama
-- Project dependencies from `requirements.txt`
+- Ollama installed and running locally
+- `llama3.2:latest` model pulled in Ollama
+- Dependencies listed in `requirements.txt`
 
-This project currently runs without a virtual environment. `run_app.ps1` sets `PYTHONPATH` so Python can find packages installed in the user site-packages directory.
+---
+## Demo
 
-## Setup
+```md
+https://youtu.be/GZby-QbjRM4
+```
+---
 
-1. Install dependencies:
+---
 
-   ```powershell
-   python -m pip install --user -r requirements.txt
-   ```
+## Project Setup
 
-2. Install and start Ollama:
+### 1. Install Dependencies
 
-   ```powershell
-   ollama pull llama3.2
-   ```
+```powershell
+python -m pip install --user -r requirements.txt
+```
 
-3. Create a `.env` file from `.env.example`:
+### 2. Install Ollama Model
 
-   ```powershell
-   Copy-Item .env.example .env
-   ```
+```powershell
+ollama pull llama3.2
+```
 
-4. Run the Streamlit app:
+### 3. Configure Environment Variables
 
-   ```powershell
-   .\run_app.ps1
-   ```
+Create a `.env` file from `.env.example`:
 
-5. Open the local URL Streamlit prints, usually:
+```powershell
+Copy-Item .env.example .env
+```
 
-   ```text
-   http://localhost:8501
-   ```
+### 4. Run the Application
 
-## Environment
+```powershell
+.\run_app.ps1
+```
+
+### 5. Open the Application
+
+After starting Streamlit, open:
+
+```text
+http://localhost:8501
+```
+
+---
+
+## Environment Configuration
 
 Default `.env` values:
 
@@ -87,14 +101,18 @@ OLLAMA_URL=http://localhost:11434/api/generate
 OLLAMA_MODEL=llama3.2:latest
 ```
 
-The app uses lower-memory Ollama settings in `llm.py`:
+### Ollama Memory Settings
+
+The application uses optimized low-memory settings in `llm.py`:
 
 ```python
 "num_ctx": 1024,
 "num_batch": 64,
 ```
 
-These settings help the app run on machines with limited free RAM.
+These settings help the application run efficiently on systems with limited RAM.
+
+---
 
 ## Sample Questions
 
@@ -106,14 +124,41 @@ These settings help the app run on machines with limited free RAM.
 - Sales vs profit by region
 - Top 5 sub-categories by profit
 
+---
+
 ## Troubleshooting
 
-If Ollama returns HTTP 500, it is often a memory issue. Close memory-heavy apps, restart Ollama, or use a smaller model.
+### Ollama HTTP 500 Error
 
-If Python cannot import `dotenv` or `streamlit`, run the app with:
+This is usually caused by insufficient memory.
+
+Possible fixes:
+- Close memory-intensive applications
+- Restart Ollama
+- Use a smaller LLM model
+
+### Python Import Errors
+
+If Python cannot import packages such as `dotenv` or `streamlit`, run the application using:
 
 ```powershell
 .\run_app.ps1
 ```
 
-That script adds the Python user package directory to `PYTHONPATH` before launching Streamlit.
+This script automatically updates `PYTHONPATH` to include user-installed Python packages.
+
+---
+
+## Future Improvements
+
+- Add support for multiple database engines
+- Improve SQL validation and query correction
+- Add conversational memory for follow-up questions
+- Enhance dashboard visualizations
+- Deploy using Docker or cloud platforms
+
+---
+
+## License
+
+This project is intended for learning and experimentation purposes.
