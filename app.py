@@ -2,6 +2,7 @@ import streamlit as st
 from db import load_data
 from llm import generate_sql
 from utils import run_sql, generate_chart, generate_insight
+import traceback
 
 st.set_page_config(page_title="BI Chatbot", layout="wide")
 
@@ -65,7 +66,7 @@ st.markdown("""
 conn = load_data()
 
 # ── Session state ─────────────────────────────────────────────────────────────
-for key, val in [("history", []), ("prefill", ""), ("submitted", False)]:
+for key, val in [("history", []), ("prefill", ""), ("submitted", False), ("last_error", None)]:
     if key not in st.session_state:
         st.session_state[key] = val
 
@@ -141,6 +142,11 @@ if not st.session_state.history:
     </div>
     """, unsafe_allow_html=True)
 
+if st.session_state.last_error:
+    st.error(st.session_state.last_error["message"])
+    with st.expander("Error details"):
+        st.code(st.session_state.last_error["traceback"])
+
 # Chat history
 for i, entry in enumerate(st.session_state.history):
 
@@ -214,7 +220,7 @@ col_input, col_btn = st.columns([5, 1])
 
 with col_input:
     question = st.text_input(
-        label="",
+        label="Ask a data question",
         value=st.session_state.prefill,
         placeholder="e.g. Compare sales and profit by region",
         label_visibility="collapsed",
@@ -232,12 +238,14 @@ if st.session_state.prefill:
 # ── Run query ─────────────────────────────────────────────────────────────────
 if (clicked or st.session_state.submitted) and question.strip():
     st.session_state.submitted = False
+    st.session_state.last_error = None
 
     with st.status("🤖 Generating SQL...", expanded=True) as status:
         try:
             response   = generate_sql(question)
             sql        = response["sql"]
             chart_type = response["chart_type"]
+            print(f"\n[GENERATED SQL]\n{sql}\n")
 
             status.update(label="📊 Running query...")
             df = run_sql(sql, conn)
@@ -258,6 +266,10 @@ if (clicked or st.session_state.submitted) and question.strip():
 
         except Exception as e:
             status.update(label="❌ Error", state="error", expanded=False)
-            st.error(f"**Error:** {e}")
+            st.session_state.last_error = {
+                "message": f"{type(e).__name__}: {e}",
+                "traceback": traceback.format_exc(),
+            }
+            print(st.session_state.last_error["traceback"])
 
     st.rerun()

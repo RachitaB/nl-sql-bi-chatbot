@@ -3,5 +3,7 @@
 charts/
 __pycache__/
 *.pyc
+.venv/
+.vscode/
 streamlit/
 *.llm_genAI
